@@ -1,7 +1,10 @@
 package comp1721.cwk1;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,10 +31,31 @@ public class Game {
     // TODO: Implement play() method
     public void play() {
         Scanner sc = new Scanner(System.in);
-        for (int i = 0; i < 7; i++) {
+        for (int i = 1; i < 7; i++) {
+            Guess guess = new Guess(i);
+            guess.readFromPlayer();
+            guess.compareWith(this.word);
+            if(guess.matches(this.word)) {
+                words.add(this.word);
+                System.out.printf("%s",guess.compareWith(this.word));
+                return;
+            } else {
+                words.add(guess.compareWith(this.word));
+                System.out.printf("%s",guess.compareWith(this.word));
+            }
         }
     }
 
     // TODO: Implement save() method, with a String parameter
-
+    public void save(String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename);
+            for (String word : words) {
+                fw.write(word + "\n");
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

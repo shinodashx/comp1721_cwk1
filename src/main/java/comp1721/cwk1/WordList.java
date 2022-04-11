@@ -22,7 +22,7 @@ public class WordList {
     // TODO: Implement getWord() with an int parameter, returning a String
     String getWord(int index) {
         if (index < 0 || index >= wordsList.size()) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
+            throw new GameException("Index out of bounds");
         }
         return wordsList.get(index);
     }

@@ -34,7 +34,6 @@ public class Game {
         for (int i = 1; i < 7; i++) {
             Guess guess = new Guess(i);
             guess.readFromPlayer();
-            guess.compareWith(this.word);
             if(guess.matches(this.word)) {
                 words.add(this.word);
                 System.out.printf("%s",guess.compareWith(this.word));

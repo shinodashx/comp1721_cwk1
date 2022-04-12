@@ -2,6 +2,9 @@ package comp1721.cwk1;
 
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.TreeSet;
+
+import static java.awt.Color.BLACK;
 
 
 public class Guess {
@@ -66,11 +69,24 @@ public class Guess {
 
     // TODO: Implement compareWith(), giving it a String parameter and String return type
     public String compareWith(String guessword) {
-        String result = "";
-        if(guessword.length() != 5) {
-            throw new GameException("Guess must be 5 characters long");
+        String result[] = new String[5];
+        TreeSet<Character> letters = new TreeSet<>();
+        for (int i = 0; i < 5; i++) {
+            letters.add(word.charAt(i));
         }
-
+        if(guessword.length() != 5) {
+            throw new GameException("Word must be 5 characters long");
+        }
+        for(int i = 0; i < 5; i++) {
+            if(guessword.charAt(i) == word.charAt(i)) {
+                result[i] = "\033["+BLACK+";;102m" + guessword.charAt(i) + "\033[0m";
+            } else if(letters.contains(guessword.charAt(i))) {
+                result[i] = "\033["+BLACK +";103m" + guessword.charAt(i) + "\033[0m";
+            } else {
+                result[i] = "\033["+BLACK +";107m" + guessword.charAt(i) + "\033[0m";
+            }
+        }
+        return result[0] + result[1] + result[2] + result[3] + result[4];
     }
 
     // TODO: Implement matches(), giving it a String parameter and boolean return type

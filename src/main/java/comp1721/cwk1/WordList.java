@@ -12,6 +12,11 @@ public class WordList {
     WordList(String filename) {
         this.filename = filename;
         wordsList = new ArrayList<String>();
+        try {
+            readFile();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     // TODO: Implement size() method, returning an int

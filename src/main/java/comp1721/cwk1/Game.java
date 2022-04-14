@@ -18,7 +18,8 @@ public class Game {
         wordList = new WordList(filename);
         LocalDate date = LocalDate.of(2021, 6, 19);
         LocalDate today = LocalDate.now();
-        int days = (int) date.toEpochDay() - (int) today.toEpochDay();
+        int days = (int) today.toEpochDay() - (int) date.toEpochDay();
+        //System.out.println(days);
         this.word = wordList.getWord(days);
     }
 
@@ -36,11 +37,11 @@ public class Game {
             guess.readFromPlayer();
             if(guess.matches(this.word)) {
                 words.add(this.word);
-                System.out.printf("%s",guess.compareWith(this.word));
+                System.out.println(guess.compareWith(this.word));
                 return;
             } else {
                 words.add(guess.compareWith(this.word));
-                System.out.printf("%s",guess.compareWith(this.word));
+                System.out.println(guess.compareWith(this.word));
             }
         }
     }

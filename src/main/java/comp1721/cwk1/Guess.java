@@ -10,6 +10,7 @@ import static java.awt.Color.BLACK;
 public class Guess {
     // Use this to get player input in readFromPlayer()
     private static final Scanner INPUT = new Scanner(System.in);
+    private static final int BLACK = 30;
     private static int numberOfGuesses;
     String word;
 
@@ -79,11 +80,11 @@ public class Guess {
         }
         for(int i = 0; i < 5; i++) {
             if(guessword.charAt(i) == word.charAt(i)) {
-                result[i] = "\033["+BLACK+";;102m" + guessword.charAt(i) + "\033[0m";
+                result[i] = "\033["+BLACK+";102m " + guessword.charAt(i) + " \033[0m";
             } else if(letters.contains(guessword.charAt(i))) {
-                result[i] = "\033["+BLACK +";103m" + guessword.charAt(i) + "\033[0m";
+                result[i] = "\033["+BLACK +";103m " + guessword.charAt(i) + " \033[0m";
             } else {
-                result[i] = "\033["+BLACK +";107m" + guessword.charAt(i) + "\033[0m";
+                result[i] = "\033["+BLACK +";107m " + guessword.charAt(i) + " \033[0m";
             }
         }
         return result[0] + result[1] + result[2] + result[3] + result[4];

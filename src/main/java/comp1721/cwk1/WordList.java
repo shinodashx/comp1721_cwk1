@@ -9,14 +9,10 @@ public class WordList {
     ArrayList<String> wordsList;
 
     // TODO: Implement constructor with a String parameter
-    WordList(String filename) {
+    WordList(String filename) throws FileNotFoundException{
         this.filename = filename;
         wordsList = new ArrayList<String>();
-        try {
-            readFile();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        readFile();
     }
 
     // TODO: Implement size() method, returning an int
@@ -32,7 +28,7 @@ public class WordList {
         return wordsList.get(index);
     }
 
-    private void readFile() throws Exception {
+    private void readFile() throws FileNotFoundException {
         try {
             Scanner sc = new Scanner(new java.io.File(filename));
             while (sc.hasNext()) {
@@ -41,7 +37,7 @@ public class WordList {
             wordsList.trimToSize();
             sc.close();
         } catch (FileNotFoundException e) {
-            throw new Exception("File not found");
+            throw new FileNotFoundException("File not found");
         }
     }
 }

@@ -12,7 +12,7 @@ public class Guess {
     // Use this to get player input in readFromPlayer()
     private static final Scanner INPUT = new Scanner(System.in);
     private static final int BLACK = 30;
-    private static int numberOfGuesses;
+    private final int numberOfGuesses;
     String word;
 
     // TODO: Implement constructor with int parameter
@@ -40,7 +40,7 @@ public class Guess {
                 throw new GameException("Word must only contain letters");
             }
         }
-        Guess.numberOfGuesses = numberOfGuesses;
+        this.numberOfGuesses = numberOfGuesses;
         word = word.toUpperCase(Locale.ROOT);
         this.word = word;
     }

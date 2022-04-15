@@ -9,7 +9,7 @@ public class WordList {
     ArrayList<String> wordsList;
 
     // TODO: Implement constructor with a String parameter
-    WordList(String filename) throws FileNotFoundException{
+    WordList(String filename) throws FileNotFoundException {
         this.filename = filename;
         wordsList = new ArrayList<String>();
         readFile();

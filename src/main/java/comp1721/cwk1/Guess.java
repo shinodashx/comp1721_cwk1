@@ -77,7 +77,7 @@ public class Guess {
         String[] result = new String[5];
         TreeMap<Character, Integer> WordMap = new TreeMap<>();
         for (int i = 0; i < 5; i++) {
-            if (WordMap.containsKey(guessword.charAt(i))){
+            if (WordMap.containsKey(guessword.charAt(i))) {
                 WordMap.put(guessword.charAt(i), WordMap.get(guessword.charAt(i)) + 1);
             } else {
                 WordMap.put(guessword.charAt(i), 1);

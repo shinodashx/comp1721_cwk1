@@ -1,10 +1,11 @@
 package comp1721.cwk1;
 
-import java.util.Locale;
-import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.*;
 
 import static java.awt.Color.BLACK;
+
+import javafx.util.Pair;
+import javafx.application.Application;
 
 
 public class Guess {
@@ -34,8 +35,8 @@ public class Guess {
         if (numberOfGuesses <= 0 || numberOfGuesses >= 6) {
             throw new GameException("Number of guesses must be between 1 and 6");
         }
-        for(int i = 0; i < word.length(); i++) {
-            if(!Character.isLetter(word.charAt(i))) {
+        for (int i = 0; i < word.length(); i++) {
+            if (!Character.isLetter(word.charAt(i))) {
                 throw new GameException("Word must only contain letters");
             }
         }
@@ -58,8 +59,8 @@ public class Guess {
     public void readFromPlayer() {
         System.out.println("Enter a word of 5 characters");
         word = INPUT.nextLine().toUpperCase(Locale.ROOT);
-        for(int i = 0; i < word.length(); i++) {
-            if(!Character.isLetter(word.charAt(i))) {
+        for (int i = 0; i < word.length(); i++) {
+            if (!Character.isLetter(word.charAt(i))) {
                 throw new GameException("Word must only contain letters");
             }
         }
@@ -70,23 +71,42 @@ public class Guess {
 
     // TODO: Implement compareWith(), giving it a String parameter and String return type
     public String compareWith(String guessword) {
-        String result[] = new String[5];
-        TreeSet<Character> letters = new TreeSet<>();
-        for (int i = 0; i < 5; i++) {
-            letters.add(word.charAt(i));
-        }
-        if(guessword.length() != 5) {
+        if (guessword.length() != 5) {
             throw new GameException("Word must be 5 characters long");
         }
-        for(int i = 0; i < 5; i++) {
-            if(guessword.charAt(i) == word.charAt(i)) {
-                result[i] = "\033["+BLACK+";102m " + guessword.charAt(i) + " \033[0m";
-            } else if(letters.contains(guessword.charAt(i))) {
-                result[i] = "\033["+BLACK +";103m " + guessword.charAt(i) + " \033[0m";
+        String[] result = new String[5];
+        TreeMap<Character, Integer> WordMap = new TreeMap<>();
+        for (int i = 0; i < 5; i++) {
+            if (WordMap.containsKey(guessword.charAt(i))){
+                WordMap.put(guessword.charAt(i), WordMap.get(guessword.charAt(i)) + 1);
             } else {
-                result[i] = "\033["+BLACK +";107m " + guessword.charAt(i) + " \033[0m";
+                WordMap.put(guessword.charAt(i), 1);
             }
         }
+        for (int i = 0; i < 5; i++) {
+            if (guessword.charAt(i) == word.charAt(i)) {
+                WordMap.put(guessword.charAt(i), WordMap.get(guessword.charAt(i)) - 1);
+                result[i] = "\033[" + BLACK + ";102m " + word.charAt(i) + " \033[0m";
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            if (result[i] == null) {
+                if (WordMap.containsKey(word.charAt(i))) {
+                    if (WordMap.get(word.charAt(i)) > 0) {
+                        WordMap.put(word.charAt(i), WordMap.get(word.charAt(i)) - 1);
+                        result[i] = "\033[" + BLACK + ";103m " + word.charAt(i) + " \033[0m";
+                    } else {
+                        result[i] = "\033[" + BLACK + ";107m " + word.charAt(i) + " \033[0m";
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            if (result[i] == null) {
+                result[i] = "\033[" + BLACK + ";107m " + word.charAt(i) + " \033[0m";
+            }
+        }
+
         return result[0] + result[1] + result[2] + result[3] + result[4];
     }
 

@@ -36,8 +36,15 @@ public class Game {
             Guess guess = new Guess(i);
             guess.readFromPlayer();
             if (guess.matches(this.word)) {
-                words.add(this.word);
                 System.out.println(guess.compareWith(this.word));
+                if(i == 1){
+                    System.out.println("Superb - Got it in one!");
+                } else if(i<6){
+                    System.out.println("Well done!");
+                } else {
+                    System.out.println("That was a close call!\n");
+                }
+                words.add(guess.compareWith(this.word));
                 return;
             } else {
                 words.add(guess.compareWith(this.word));

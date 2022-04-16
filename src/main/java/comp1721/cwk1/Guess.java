@@ -75,25 +75,47 @@ public class Guess {
             throw new GameException("Word must be 5 characters long");
         }
         String[] result = new String[5];
-        TreeMap<Character, Integer> WordMap = new TreeMap<>();
+        TreeMap<Character,ArrayList> WordMap = new TreeMap<Character,ArrayList>();
         for (int i = 0; i < 5; i++) {
             if (WordMap.containsKey(guessword.charAt(i))) {
-                WordMap.put(guessword.charAt(i), WordMap.get(guessword.charAt(i)) + 1);
+                ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
+                ArrayList<Integer> temp2 = new ArrayList<>();
+                temp2.add(temp.get(0)+1);
+                for (int j = 1; j < temp.size(); j++) {
+                    temp2.add(temp.get(j));
+                }
+                temp2.add(i);
+                WordMap.put(guessword.charAt(i), temp2);
             } else {
-                WordMap.put(guessword.charAt(i), 1);
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                temp.add(1);
+                temp.add(i);
+                WordMap.put(guessword.charAt(i), temp);
             }
         }
         for (int i = 0; i < 5; i++) {
             if (guessword.charAt(i) == word.charAt(i)) {
-                WordMap.put(guessword.charAt(i), WordMap.get(guessword.charAt(i)) - 1);
+                ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
+                ArrayList<Integer> temp2 = new ArrayList<Integer>();
+                temp2.add(temp.get(0)-1);
+                for (int j = 1; j < temp.size(); j++) {
+                    temp2.add(temp.get(j));
+                }
+                WordMap.put(guessword.charAt(i), temp2);
                 result[i] = "\033[" + BLACK + ";102m " + word.charAt(i) + " \033[0m";
             }
         }
         for (int i = 0; i < 5; i++) {
             if (result[i] == null) {
                 if (WordMap.containsKey(word.charAt(i))) {
-                    if (WordMap.get(word.charAt(i)) > 0) {
-                        WordMap.put(word.charAt(i), WordMap.get(word.charAt(i)) - 1);
+                    ArrayList<Integer> temp = WordMap.get(word.charAt(i));
+                    ArrayList<Integer> temp2 = new ArrayList<Integer>();
+                    if (temp.get(0) > 0) {
+                        temp2.add(temp.get(0)-1);
+                        for (int j = 1; j < temp.size(); j++) {
+                            temp2.add(temp.get(j));
+                        }
+                        WordMap.put(word.charAt(i), temp2);
                         result[i] = "\033[" + BLACK + ";103m " + word.charAt(i) + " \033[0m";
                     } else {
                         result[i] = "\033[" + BLACK + ";107m " + word.charAt(i) + " \033[0m";

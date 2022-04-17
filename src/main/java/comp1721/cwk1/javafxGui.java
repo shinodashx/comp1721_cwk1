@@ -32,6 +32,21 @@ public class javafxGui {
         BorderPane root = getPane();
         Scene scene = new Scene(root, 1000, 1000);
         stage.setScene(scene);
+
+
+        //add key
+        scene.setOnKeyPressed(event -> {
+            if(Character.isLetter(event.getCharacter().charAt(0))) {
+                if(nowword.length() < 5 || nowword.length() > 5) {
+                    event.consume();
+                    return;
+                }
+                nowword += event.getCharacter();
+
+            }
+
+        });
+
     }
 //    private void drawGrid(GraphicsContext graphicsContext2D, int cols, int rows) {
 //        for(int i = 0; i < cols; i++) {
@@ -88,6 +103,16 @@ public class javafxGui {
                 graphicsContext2D.setFill(Color.GRAY);
                 graphicsContext2D.strokeRoundRect(i * MUL_FACTOR + SPACING * (i + 1), j * MUL_FACTOR + SPACING * (j + 1), MUL_FACTOR, MUL_FACTOR, 50, 50);
             }
+        }
+    }
+
+    void updateCanvas(Canvas canvas) {
+        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawGrid(graphicsContext2D, this.COLS, this.ROWS);
+        int i = 0;
+        for (int guessNum = 0; guessNum < uess.getGuessNumber(); guessNum++) {
+
         }
     }
 

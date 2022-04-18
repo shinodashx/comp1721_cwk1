@@ -128,7 +128,68 @@ public class Guess {
                 result[i] = "\033[" + BLACK + ";107m " + word.charAt(i) + " \033[0m";
             }
         }
+        return result[0] + result[1] + result[2] + result[3] + result[4];
+    }
 
+    // TODO: Implement compareWith(), giving it a String parameter and String return type
+    public String compareWithForGui(String guessword) {
+        if (guessword.length() != 5) {
+            throw new GameException("Word must be 5 characters long");
+        }
+        String[] result = new String[5];
+        TreeMap<Character,ArrayList> WordMap = new TreeMap<Character,ArrayList>();
+        for (int i = 0; i < 5; i++) {
+            if (WordMap.containsKey(guessword.charAt(i))) {
+                ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
+                ArrayList<Integer> temp2 = new ArrayList<>();
+                temp2.add(temp.get(0)+1);
+                for (int j = 1; j < temp.size(); j++) {
+                    temp2.add(temp.get(j));
+                }
+                temp2.add(i);
+                WordMap.put(guessword.charAt(i), temp2);
+            } else {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                temp.add(1);
+                temp.add(i);
+                WordMap.put(guessword.charAt(i), temp);
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            if (guessword.charAt(i) == word.charAt(i)) {
+                ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
+                ArrayList<Integer> temp2 = new ArrayList<Integer>();
+                temp2.add(temp.get(0)-1);
+                for (int j = 1; j < temp.size(); j++) {
+                    temp2.add(temp.get(j));
+                }
+                WordMap.put(guessword.charAt(i), temp2);
+                result[i] = "Y";
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            if (result[i] == null) {
+                if (WordMap.containsKey(word.charAt(i))) {
+                    ArrayList<Integer> temp = WordMap.get(word.charAt(i));
+                    ArrayList<Integer> temp2 = new ArrayList<Integer>();
+                    if (temp.get(0) > 0) {
+                        temp2.add(temp.get(0)-1);
+                        for (int j = 1; j < temp.size(); j++) {
+                            temp2.add(temp.get(j));
+                        }
+                        WordMap.put(word.charAt(i), temp2);
+                        result[i] = "T";
+                    } else {
+                        result[i] = "N";
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            if (result[i] == null) {
+                result[i] = "N";
+            }
+        }
         return result[0] + result[1] + result[2] + result[3] + result[4];
     }
 
@@ -136,4 +197,5 @@ public class Guess {
     public boolean matches(String guess) {
         return this.word.equals(guess);
     }
+
 }

@@ -4,12 +4,16 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 
 
 public class javafxGui {
@@ -18,14 +22,12 @@ public class javafxGui {
     private final static int MAX_VALUE = 100;
     private final static int MIN_VALUE = 0;
     private final static int SPACING = 10;
-    private final Game game;
     private final int ROWS;
     private final int COLS;
     private final static Stage stage = new Stage();
     private final Canvas canvas;
     private String nowword;
     public javafxGui() throws FileNotFoundException {
-        this.game = new Game("data/words.txt");
         this.ROWS = 1;
         this.COLS = 5;
         this.canvas = new Canvas(this.COLS * MUL_FACTOR + SPACING * (this.COLS + 1), this.ROWS * MUL_FACTOR + SPACING * (this.ROWS + 1));
@@ -42,20 +44,30 @@ public class javafxGui {
                     return;
                 }
                 nowword += event.getCharacter();
-
             }
 
         });
 
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+            if(event.getCode() == KeyCode.ENTER && nowword.length() == 5) {
+                try {
+                    updateCanvas();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                nowword = nowword.substring(0, nowword.length() - 1);
+                try {
+                    updateCanvas();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            event.consume();
+        });
+
     }
-//    private void drawGrid(GraphicsContext graphicsContext2D, int cols, int rows) {
-//        for(int i = 0; i < cols; i++) {
-//            for(int j = 0; j < rows; j++) {
-//                graphicsContext2D.setFill(Color.GRAY);
-//                graphicsContext2D.strokeRoundRect(i * MUL_FACTOR + SPACING * (i + 1), j * MUL_FACTOR + SPACING * (j + 1), MUL_FACTOR, MUL_FACTOR, 50, 50);
-//            }
-//        }
-//    }
+
     public void start() {
         stage.show();
     }
@@ -63,17 +75,7 @@ public class javafxGui {
         javafxGui gui = new javafxGui();
         gui.start();
     }
-//    void updateCanvas(Canvas canvas) {
-//        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
-//        graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//        drawGrid(graphicsContext2D, this.COLS, this.ROWS);
-//        for(int i = 0; i < this.COLS; i++) {
-//            for(int j = 0; j < this.ROWS; j++) {
-//                graphicsContext2D.setFill(Color.BLACK);
-//                graphicsContext2D.fillText(game.getGrid()[i][j].toString(), i * MUL_FACTOR + SPACING * (i + 1), j * MUL_FACTOR + SPACING * (j + 1));
-//            }
-//        }
-//    }
+
     BorderPane getPane(){
         BorderPane root = new BorderPane();
 
@@ -105,17 +107,45 @@ public class javafxGui {
             }
         }
     }
+    public String Game(String filename) throws FileNotFoundException {
+        WordList wordList = new WordList(filename);
+        LocalDate date = LocalDate.of(2021, 6, 19);
+        LocalDate today = LocalDate.now();
+        int days = (int) today.toEpochDay() - (int) date.toEpochDay();
+        //System.out.println(days);
+        return wordList.getWord(days);
+    }
 
-    void updateCanvas(Canvas canvas) {
+    void updateCanvas() throws FileNotFoundException {
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         graphicsContext2D.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         drawGrid(graphicsContext2D, this.COLS, this.ROWS);
-        int i = 0;
-        for (int guessNum = 0; guessNum < uess.getGuessNumber(); guessNum++) {
+        String theWord = Game("wordlist.txt");
+        for(int i = 0 ;i<=6;++i) {
+            Guess guess = new Guess(i);
+            String word = guess.compareWithForGui(theWord);
+            for (int j = 0; j < word.length(); j++) {
+                Color color = Color.GRAY;
+                if (word.charAt(j) == 'Y') {
+                    color = Color.GREEN;
+                } else if(word.charAt(j) == 'T') {
+                    color= Color.YELLOW;
+                }
+                graphicsContext2D.setFill(color);
+                graphicsContext2D.fillRoundRect(j * MUL_FACTOR + SPACING * (j + 1), i * MUL_FACTOR + SPACING * (i + 1), MUL_FACTOR, MUL_FACTOR, 50, 50);
 
+                graphicsContext2D.setFill(Color.WHITE);
+                graphicsContext2D.fillText(word.charAt(j) + "", j * MUL_FACTOR + SPACING * (j + 1) + MUL_FACTOR / 2, i * MUL_FACTOR + SPACING * (i + 1) + MUL_FACTOR / 2);
+                graphicsContext2D.setFont(new Font(graphicsContext2D.getFont().getName(), MUL_FACTOR / 2));
+            }
+        }
+        graphicsContext2D.setFill(Color.BLACK);
+        int i = 0;
+        for(char c : theWord.toCharArray()) {
+            graphicsContext2D.setFont(new Font(graphicsContext2D.getFont().getName(), MUL_FACTOR / 2));
+            graphicsContext2D.fillText(c + "", i * MUL_FACTOR + SPACING * (i + 1) + MUL_FACTOR / 2, 7 * MUL_FACTOR + SPACING * (7 + 1) + MUL_FACTOR / 2);
         }
     }
-
 
 
 }

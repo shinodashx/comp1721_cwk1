@@ -75,12 +75,12 @@ public class Guess {
             throw new GameException("Word must be 5 characters long");
         }
         String[] result = new String[5];
-        TreeMap<Character,ArrayList> WordMap = new TreeMap<Character,ArrayList>();
+        TreeMap<Character, ArrayList> WordMap = new TreeMap<Character, ArrayList>();
         for (int i = 0; i < 5; i++) {
             if (WordMap.containsKey(guessword.charAt(i))) {
                 ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
                 ArrayList<Integer> temp2 = new ArrayList<>();
-                temp2.add(temp.get(0)+1);
+                temp2.add(temp.get(0) + 1);
                 for (int j = 1; j < temp.size(); j++) {
                     temp2.add(temp.get(j));
                 }
@@ -97,7 +97,7 @@ public class Guess {
             if (guessword.charAt(i) == word.charAt(i)) {
                 ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
                 ArrayList<Integer> temp2 = new ArrayList<Integer>();
-                temp2.add(temp.get(0)-1);
+                temp2.add(temp.get(0) - 1);
                 for (int j = 1; j < temp.size(); j++) {
                     temp2.add(temp.get(j));
                 }
@@ -111,7 +111,7 @@ public class Guess {
                     ArrayList<Integer> temp = WordMap.get(word.charAt(i));
                     ArrayList<Integer> temp2 = new ArrayList<Integer>();
                     if (temp.get(0) > 0) {
-                        temp2.add(temp.get(0)-1);
+                        temp2.add(temp.get(0) - 1);
                         for (int j = 1; j < temp.size(); j++) {
                             temp2.add(temp.get(j));
                         }
@@ -131,18 +131,15 @@ public class Guess {
         return result[0] + result[1] + result[2] + result[3] + result[4];
     }
 
-    // TODO: Implement compareWith(), giving it a String parameter and String return type
+    // Implement compareWithForGui(), giving it a String parameter and String return type
     public String compareWithForGui(String guessword) {
-        if (guessword.length() != 5) {
-            throw new GameException("Word must be 5 characters long");
-        }
         String[] result = new String[5];
-        TreeMap<Character,ArrayList> WordMap = new TreeMap<Character,ArrayList>();
+        TreeMap<Character, ArrayList> WordMap = new TreeMap<Character, ArrayList>();
         for (int i = 0; i < 5; i++) {
             if (WordMap.containsKey(guessword.charAt(i))) {
                 ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
                 ArrayList<Integer> temp2 = new ArrayList<>();
-                temp2.add(temp.get(0)+1);
+                temp2.add(temp.get(0) + 1);
                 for (int j = 1; j < temp.size(); j++) {
                     temp2.add(temp.get(j));
                 }
@@ -159,7 +156,7 @@ public class Guess {
             if (guessword.charAt(i) == word.charAt(i)) {
                 ArrayList<Integer> temp = WordMap.get(guessword.charAt(i));
                 ArrayList<Integer> temp2 = new ArrayList<Integer>();
-                temp2.add(temp.get(0)-1);
+                temp2.add(temp.get(0) - 1);
                 for (int j = 1; j < temp.size(); j++) {
                     temp2.add(temp.get(j));
                 }
@@ -173,7 +170,7 @@ public class Guess {
                     ArrayList<Integer> temp = WordMap.get(word.charAt(i));
                     ArrayList<Integer> temp2 = new ArrayList<Integer>();
                     if (temp.get(0) > 0) {
-                        temp2.add(temp.get(0)-1);
+                        temp2.add(temp.get(0) - 1);
                         for (int j = 1; j < temp.size(); j++) {
                             temp2.add(temp.get(j));
                         }
@@ -193,9 +190,48 @@ public class Guess {
         return result[0] + result[1] + result[2] + result[3] + result[4];
     }
 
+    // accessable person
+    public void getWord(String guessword) {
+        TreeSet<Integer> perfect = new TreeSet<Integer>();
+        TreeSet<Integer> wrong = new TreeSet<Integer>();
+        TreeSet<Integer> right = new TreeSet<Integer>();
+        TreeMap<Integer, String> wordMap = new TreeMap<Integer, String>();
+        wordMap.put(1, "1st");
+        wordMap.put(2, "2nd");
+        wordMap.put(3, "3rd");
+        wordMap.put(4, "4th");
+        wordMap.put(5, "5th");
+        String result = compareWithForGui(guessword);
+        for (int i = 0; i < 5; i++) {
+            if (result.charAt(i) == 'Y') {
+                perfect.add(i);
+            } else if (result.charAt(i) == 'T') {
+                right.add((i));
+            } else {
+                wrong.add(i);
+            }
+        }
+        if (right.size() > 0) {
+            if (perfect.size() == 1) {
+                System.out.printf("%s is correct but in wrong place", wordMap.get(right.first()));
+            } else {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                for (int i : right) {
+                    temp.add(i);
+                }
+                for (int i = 0; i < temp.size() - 1; i++) {
+                    System.out.printf("%s ", wordMap.get(temp.get(i)));
+                }
+                System.out.printf("and %s is correct but in wrong place", wordMap.get(temp.get(temp.size() - 1)));
+            }
+        } else {
+
+        }
+
+    }
+
     // TODO: Implement matches(), giving it a String parameter and boolean return type
     public boolean matches(String guess) {
         return this.word.equals(guess);
     }
-
 }

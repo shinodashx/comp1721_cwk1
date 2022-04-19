@@ -11,10 +11,14 @@ import java.util.*;
 public class Game {
     private final WordList wordList;
     private String word;
+    private int round;
+    private int winFlag;
     private final List<String> words = new ArrayList<String>();
 
     // TODO: Implement constructor with String parameter
     public Game(String filename) throws FileNotFoundException {
+        round = 0;
+        winFlag = 0;
         wordList = new WordList(filename);
         LocalDate date = LocalDate.of(2021, 6, 19);
         LocalDate today = LocalDate.now();
@@ -33,6 +37,7 @@ public class Game {
     public void play() {
         Scanner sc = new Scanner(System.in);
         for (int i = 1; i < 7; i++) {
+            round++;
             Guess guess = new Guess(i);
             guess.readFromPlayer();
             if (guess.matches(this.word)) {
@@ -44,6 +49,7 @@ public class Game {
                 } else {
                     System.out.println("That was a close call!\n");
                 }
+                winFlag = 1;
                 words.add(guess.compareWith(this.word));
                 return;
             } else {
@@ -57,6 +63,22 @@ public class Game {
     public void save(String filename) {
         try {
             FileWriter fw = new FileWriter(filename);
+            fw.write(winFlag + "\n");
+            fw.write(round + "\n");
+            for (String word : words) {
+                fw.write(word + "\n");
+            }
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Implement saveHistory() method, with a String parameter
+    public void saveHistory(String filename) {
+        try {
+            FileWriter fw = new FileWriter(filename, true);
             for (String word : words) {
                 fw.write(word + "\n");
             }

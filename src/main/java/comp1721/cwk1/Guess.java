@@ -212,20 +212,48 @@ public class Guess {
             }
         }
         if (right.size() > 0) {
-            if (perfect.size() == 1) {
-                System.out.printf("%s is correct but in wrong place", wordMap.get(right.first()));
+            if (right.size() == 1) {
+                System.out.printf("%s correct but in wrong place", wordMap.get(right.first()));
             } else {
                 ArrayList<Integer> temp = new ArrayList<Integer>();
                 for (int i : right) {
                     temp.add(i);
                 }
                 for (int i = 0; i < temp.size() - 1; i++) {
-                    System.out.printf("%s ", wordMap.get(temp.get(i)));
-                }
-                System.out.printf("and %s is correct but in wrong place", wordMap.get(temp.get(temp.size() - 1)));
-            }
-        } else {
+                    if(i!=temp.size()-2){
+                        System.out.printf("%s, ", wordMap.get(temp.get(i)));
+                    } else {
+                        System.out.printf("%s ", wordMap.get(temp.get(i)));
+                    }
 
+                }
+                System.out.printf("and %s correct but in wrong place", wordMap.get(temp.get(temp.size() - 1)));
+            }
+            if(perfect.size()==0){
+                System.out.println(".");
+            } else {
+                System.out.println(", ");
+
+            }
+        }
+        if (perfect.size() > 0) {
+            if (perfect.size() == 1) {
+                System.out.printf("%s perfect", wordMap.get(perfect.first()));
+            } else {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                for (int i : perfect) {
+                    temp.add(i);
+                }
+                for (int i = 0; i < temp.size() - 1; i++) {
+                    if(i!=temp.size()-2){
+                        System.out.printf("%s, ", wordMap.get(temp.get(i)));
+                    } else {
+                        System.out.printf("%s ", wordMap.get(temp.get(i)));
+                    }
+                }
+                System.out.printf("and %s perfect", wordMap.get(temp.get(temp.size() - 1)));
+                System.out.println(".");
+            }
         }
 
     }

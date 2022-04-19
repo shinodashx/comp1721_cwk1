@@ -29,6 +29,7 @@ public class Wordle {
         }
         game.play();
         game.save("build/lastgame.txt");
+        game.saveHistory("build/history.txt");
     }
 
 }

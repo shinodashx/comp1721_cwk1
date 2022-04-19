@@ -15,6 +15,9 @@ public class Game {
     private int winFlag;
     private final List<String> words = new ArrayList<String>();
     int acsFlag = 0;
+    private final List<String> history = new ArrayList<String>();
+    private final List<Integer> historywinFlag = new ArrayList<Integer>();
+    private final List<Integer> historyround = new ArrayList<Integer>();
 
     // TODO: Implement constructor with String parameter
     public Game(String filename) throws FileNotFoundException {
@@ -59,9 +62,9 @@ public class Game {
                 return;
             } else {
                 words.add(guess.compareWith(this.word));
-                if(acsFlag!=1)System.out.println(guess.compareWithForGui(this.word));
+                if(acsFlag!=1)System.out.println(guess.compareWith(this.word));
                 else {
-                    guess.getWord(this.word);
+                    guess.compareWithForGui(this.word);
                 }
             }
         }
@@ -71,8 +74,6 @@ public class Game {
     public void save(String filename) {
         try {
             FileWriter fw = new FileWriter(filename);
-            fw.write(winFlag + "\n");
-            fw.write(round + "\n");
             for (String word : words) {
                 fw.write(word + "\n");
             }
@@ -87,6 +88,8 @@ public class Game {
     public void saveHistory(String filename) {
         try {
             FileWriter fw = new FileWriter(filename, true);
+            fw.write(   winFlag + "\n");
+            fw.write(round + "\n");
             for (String word : words) {
                 fw.write(word + "\n");
             }
@@ -103,5 +106,34 @@ public class Game {
             acsFlag = 0;
         }
     }
+
+    void showHistory(String filename) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File(filename));
+        int cnt = 0;
+        int win = 0;
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.put(1, 0);
+        map.put(2, 0);
+        map.put(3, 0);
+        map.put(4, 0);
+        map.put(5, 0);
+        while (sc.hasNextLine()) {
+            cnt++;
+            int status = sc.nextInt();
+            historywinFlag.add(status);
+            win+=status;
+            status = sc.nextInt();
+            map.put(status, map.get(status) + 1);
+            historyround.add(status);
+            for (int i = 0; i < historyround.get(historyround.size() - 1); i++) {
+                history.add(sc.nextLine());
+            }
+        }
+        sc.close();
+
+
+    }
+
+
 
 }

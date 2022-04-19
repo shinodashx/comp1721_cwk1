@@ -57,7 +57,7 @@ public class Guess {
 
     // TODO: Implement readFromPlayer()
     public void readFromPlayer() {
-        System.out.println("Enter a word of 5 characters");
+
         word = INPUT.nextLine().toUpperCase(Locale.ROOT);
         for (int i = 0; i < word.length(); i++) {
             if (!Character.isLetter(word.charAt(i))) {
@@ -133,6 +133,9 @@ public class Guess {
 
     // Implement compareWithForGui(), giving it a String parameter and String return type
     public String compareWithForGui(String guessword) {
+        if (guessword.length() != 5) {
+            throw new GameException("Word must be 5 characters long");
+        }
         String[] result = new String[5];
         TreeMap<Character, ArrayList> WordMap = new TreeMap<Character, ArrayList>();
         for (int i = 0; i < 5; i++) {
@@ -204,11 +207,11 @@ public class Guess {
         String result = compareWithForGui(guessword);
         for (int i = 0; i < 5; i++) {
             if (result.charAt(i) == 'Y') {
-                perfect.add(i);
+                perfect.add(i+1);
             } else if (result.charAt(i) == 'T') {
-                right.add((i));
+                right.add(i+1);
             } else {
-                wrong.add(i);
+                wrong.add(i+1);
             }
         }
         if (right.size() > 0) {
@@ -230,15 +233,16 @@ public class Guess {
                 System.out.printf("and %s correct but in wrong place", wordMap.get(temp.get(temp.size() - 1)));
             }
             if(perfect.size()==0){
-                System.out.println(".");
+                System.out.printf(".");
             } else {
-                System.out.println(", ");
+                System.out.printf(", ");
 
             }
         }
         if (perfect.size() > 0) {
             if (perfect.size() == 1) {
                 System.out.printf("%s perfect", wordMap.get(perfect.first()));
+                System.out.printf(".");
             } else {
                 ArrayList<Integer> temp = new ArrayList<Integer>();
                 for (int i : perfect) {
@@ -252,9 +256,13 @@ public class Guess {
                     }
                 }
                 System.out.printf("and %s perfect", wordMap.get(temp.get(temp.size() - 1)));
-                System.out.println(".");
+                System.out.printf(".");
             }
         }
+        if(wrong.size() == 5) {
+            System.out.printf("No one correct.");
+        }
+        System.out.printf("\n");
 
     }
 

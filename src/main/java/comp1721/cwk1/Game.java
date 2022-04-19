@@ -14,6 +14,7 @@ public class Game {
     private int round;
     private int winFlag;
     private final List<String> words = new ArrayList<String>();
+    int acsFlag = 0;
 
     // TODO: Implement constructor with String parameter
     public Game(String filename) throws FileNotFoundException {
@@ -37,11 +38,15 @@ public class Game {
     public void play() {
         Scanner sc = new Scanner(System.in);
         for (int i = 1; i < 7; i++) {
+            System.out.printf("Enter guess(%d/6) :",i);
             round++;
             Guess guess = new Guess(i);
             guess.readFromPlayer();
             if (guess.matches(this.word)) {
-                System.out.println(guess.compareWith(this.word));
+                if(acsFlag!=1)System.out.println(guess.compareWith(this.word));
+                else {
+                    guess.getWord(this.word);
+                }
                 if(i == 1){
                     System.out.println("Superb - Got it in one!");
                 } else if(i<6){
@@ -54,7 +59,10 @@ public class Game {
                 return;
             } else {
                 words.add(guess.compareWith(this.word));
-                System.out.println(guess.compareWith(this.word));
+                if(acsFlag!=1)System.out.println(guess.compareWithForGui(this.word));
+                else {
+                    guess.getWord(this.word);
+                }
             }
         }
     }
@@ -87,4 +95,13 @@ public class Game {
             e.printStackTrace();
         }
     }
+
+    public void getacs(int x){
+        if(x == 1){
+            acsFlag = 1;
+        } else {
+            acsFlag = 0;
+        }
+    }
+
 }
